@@ -1,0 +1,547 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#0F1115">
+
+    <!-- Верхняя панель -->
+    <LinearLayout
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:background="#0F1115"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="16dp"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="IR SCANNER"
+            android:textColor="#F5F5F5"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.15" />
+
+        <ImageView
+            android:id="@+id/btnHistory"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginEnd="8dp"
+            android:src="@android:drawable/ic_menu_sort_by_size"
+            app:tint="#4DD0E1"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true" />
+
+        <ImageView
+            android:id="@+id/btnHelp"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginEnd="8dp"
+            android:src="@android:drawable/ic_menu_help"
+            app:tint="#4DD0E1"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true" />
+
+        <TextView
+            android:id="@+id/irStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/status_bg"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="6dp"
+            android:text="ГОТОВ"
+            android:textColor="#4DD0E1"
+            android:textSize="11sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <!-- Вкладки -->
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#0F1115"
+        app:layout_constraintTop_toBottomOf="@id/topBar"
+        app:tabIndicatorColor="#4DD0E1"
+        app:tabIndicatorHeight="2dp"
+        app:tabMode="scrollable"
+        app:tabSelectedTextColor="#4DD0E1"
+        app:tabTextColor="#6B7280" />
+
+    <!-- ЭКРАН 1: ИК-детектор -->
+    <FrameLayout
+        android:id="@+id/irContainer"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/bottomBar"
+        app:layout_constraintTop_toBottomOf="@id/tabLayout">
+
+        <androidx.camera.view.PreviewView
+            android:id="@+id/previewView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <View
+            android:id="@+id/nightFilter"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#2200FF00"
+            android:visibility="gone" />
+
+        <com.example.ircamera.OverlayView
+            android:id="@+id/overlayView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <TextView
+            android:id="@+id/irHint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/hint_bg"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="8dp"
+            android:text="Водите телефоном по комнате"
+            android:textColor="#E0E0E0"
+            android:textSize="12sp" />
+
+        <!-- Карточка чувствительности -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardSensitivity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:layout_margin="16dp"
+            app:cardBackgroundColor="#E60F1115"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="0dp"
+            app:strokeColor="#1F2937"
+            app:strokeWidth="1dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="12dp"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="ЧУВСТВИТЕЛЬНОСТЬ"
+                        android:textColor="#FFFFFF"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:letterSpacing="0.1" />
+
+                    <ImageView
+                        android:id="@+id/btnToggleSlider"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@android:drawable/arrow_up_float"
+                        app:tint="#4DD0E1"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:clickable="true" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/sliderLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="12dp"
+                    android:paddingBottom="12dp">
+
+                    <com.google.android.material.slider.Slider
+                        android:id="@+id/sliderSensitivity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:stepSize="10"
+                        android:value="190"
+                        android:valueFrom="100"
+                        android:valueTo="250"
+                        app:thumbColor="#4DD0E1"
+                        app:trackColorActive="#4DD0E1"
+                        app:trackColorInactive="#1F2937" />
+                </LinearLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+    </FrameLayout>
+
+    <!-- ЭКРАН 2: Wi-Fi -->
+    <LinearLayout
+        android:id="@+id/wifiContainer"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:padding="20dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/bottomBar"
+        app:layout_constraintTop_toBottomOf="@id/tabLayout">
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="#161A22"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="0dp"
+            app:strokeColor="#1F2937"
+            app:strokeWidth="1dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="АНАЛИЗ WI-FI"
+                    android:textColor="#F5F5F5"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="Поиск скрытых камер и подозрительных сетей"
+                    android:textColor="#6B7280"
+                    android:textSize="12sp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnScanWifi"
+                    style="@style/Widget.MaterialComponents.Button"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="20dp"
+                    android:text="СКАНИРОВАТЬ"
+                    android:textColor="#0F1115"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    app:backgroundTint="#4DD0E1"
+                    app:cornerRadius="12dp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <TextView
+            android:id="@+id/wifiStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Готов к сканированию"
+            android:textColor="#6B7280"
+            android:textSize="12sp" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/wifiList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="monospace"
+                android:textColor="#E0E0E0"
+                android:textSize="12sp"
+                android:lineSpacingExtra="6dp" />
+        </ScrollView>
+    </LinearLayout>
+
+    <!-- ЭКРАН 3: Порт -->
+    <LinearLayout
+        android:id="@+id/portContainer"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:padding="20dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/bottomBar"
+        app:layout_constraintTop_toBottomOf="@id/tabLayout">
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="#161A22"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="0dp"
+            app:strokeColor="#1F2937"
+            app:strokeWidth="1dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ПРОВЕРКА ПОРТА 554"
+                    android:textColor="#F5F5F5"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="Стандартный порт IP-камер (RTSP)"
+                    android:textColor="#6B7280"
+                    android:textSize="12sp" />
+
+                <EditText
+                    android:id="@+id/etGateway"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/edit_bg"
+                    android:hint="192.168.1.1"
+                    android:inputType="text"
+                    android:padding="14dp"
+                    android:textColor="#F5F5F5"
+                    android:textColorHint="#4B5563"
+                    android:textSize="14sp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnScanPort"
+                    style="@style/Widget.MaterialComponents.Button"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="16dp"
+                    android:text="ПРОВЕРИТЬ"
+                    android:textColor="#0F1115"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    app:backgroundTint="#4DD0E1"
+                    app:cornerRadius="12dp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <TextView
+            android:id="@+id/portStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/card_bg"
+            android:padding="16dp"
+            android:text="Результат появится здесь"
+            android:textColor="#E0E0E0"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <!-- ЭКРАН 4: Аудиодетектор -->
+    <LinearLayout
+        android:id="@+id/audioContainer"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:gravity="center"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/bottomBar"
+        app:layout_constraintTop_toBottomOf="@id/tabLayout">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="МИКРОФОН"
+            android:textColor="#6B7280"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.2" />
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/audioCircle"
+            android:layout_width="320dp"
+            android:layout_height="320dp"
+            android:layout_marginTop="24dp"
+            android:indeterminate="false"
+            android:max="100"
+            android:progress="0"
+            app:indicatorColor="#4DD0E1"
+            app:trackColor="#1F2937"
+            app:trackThickness="20dp" />
+
+        <TextView
+            android:id="@+id/audioValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="0 dB"
+            android:textColor="#4DD0E1"
+            android:textSize="48sp"
+            android:textStyle="bold"
+            android:shadowColor="#4DD0E1"
+            android:shadowDx="0"
+            android:shadowDy="0"
+            android:shadowRadius="20" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="Приблизьте телефон к подозрительному месту. Резкий скачок шума может указывать на микрофон."
+            android:textColor="#6B7280"
+            android:textAlignment="center"
+            android:textSize="13sp" />
+    </LinearLayout>
+
+    <!-- ЭКРАН 5: Магнитометр -->
+    <LinearLayout
+        android:id="@+id/magnetContainer"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:gravity="center"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/bottomBar"
+        app:layout_constraintTop_toBottomOf="@id/tabLayout">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="МАГНИТНОЕ ПОЛЕ"
+            android:textColor="#6B7280"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.2" />
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/magnetCircle"
+            android:layout_width="320dp"
+            android:layout_height="320dp"
+            android:layout_marginTop="24dp"
+            android:indeterminate="false"
+            android:max="200"
+            android:progress="0"
+            app:indicatorColor="#4DD0E1"
+            app:trackColor="#1F2937"
+            app:trackThickness="20dp" />
+
+        <TextView
+            android:id="@+id/magnetValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="0 мкТл"
+            android:textColor="#4DD0E1"
+            android:textSize="48sp"
+            android:textStyle="bold"
+            android:shadowColor="#4DD0E1"
+            android:shadowDx="0"
+            android:shadowDy="0"
+            android:shadowRadius="20" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="Норма: 30–60 мкТл. Резкий скачок до 100+ указывает на металл или магнит."
+            android:textColor="#6B7280"
+            android:textAlignment="center"
+            android:textSize="13sp" />
+    </LinearLayout>
+
+    <!-- Нижняя панель управления -->
+    <LinearLayout
+        android:id="@+id/bottomBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#0F1115"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnToggleIr"
+            style="@style/Widget.MaterialComponents.Button"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_weight="2"
+            android:enabled="false"
+            android:text="СТАРТ"
+            android:textColor="#0F1115"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:maxLines="1"
+            app:backgroundTint="#4DD0E1"
+            app:cornerRadius="16dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnReset"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_marginStart="4dp"
+            android:layout_weight="1"
+            android:text="СБРОС"
+            android:textSize="8sp"
+            android:maxLines="1"
+            app:cornerRadius="16dp"
+            app:strokeColor="#1F2937"
+            app:strokeWidth="1dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnTorch"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_marginStart="4dp"
+            android:layout_weight="1"
+            android:text=""
+            app:icon="@drawable/ic_flashlight"
+            app:iconTint="#4DD0E1"
+            app:iconGravity="textStart"
+            app:iconPadding="0dp"
+            app:cornerRadius="16dp"
+            app:strokeColor="#1F2937"
+            app:strokeWidth="1dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnNight"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_marginStart="4dp"
+            android:layout_weight="1"
+            android:text="НОЧЬ"
+            android:textSize="8sp"
+            android:maxLines="1"
+            app:cornerRadius="16dp"
+            app:strokeColor="#1F2937"
+            app:strokeWidth="1dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCapture"
+            style="@style/Widget.MaterialComponents.Button"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_marginStart="4dp"
+            android:layout_weight="1"
+            android:text="ФОТО"
+            android:textSize="8sp"
+            android:maxLines="1"
+            app:backgroundTint="#161A22"
+            app:cornerRadius="16dp"
+            app:strokeColor="#1F2937"
+            app:strokeWidth="1dp" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
